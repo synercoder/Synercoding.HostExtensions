@@ -14,7 +14,8 @@ namespace Microsoft.Extensions.Hosting
         /// <param name="hostTask">The task that can be awaited to return the <see cref="IHost"/> to run.</param>
         /// <param name="token">The token to trigger shutdown.</param>
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation.</returns>
-        public static async Task RunAsync(this Task<IHost> hostTask, CancellationToken token = default)
+        public static async Task RunAsync<THost>(this Task<THost> hostTask, CancellationToken token = default)
+            where THost : IHost
         {
             var host = await hostTask;
 

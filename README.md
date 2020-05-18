@@ -7,12 +7,12 @@ Install it using the following commands:
 
 **Using the NuGet Package Manager**
 ```
-Install-Package Synercoding.HostExtensions.EntityFramework -Version 1.0.0-alpha01
+Install-Package Synercoding.HostExtensions.EntityFramework -Version 1.0.0-alpha02
 ```
 
 **Using the .NET CLI**
 ```
-dotnet add package Synercoding.HostExtensions -Version 1.0.0-alpha01
+dotnet add package Synercoding.HostExtensions -Version 1.0.0-alpha02
 ```
 
 ---
@@ -26,12 +26,12 @@ Install it using the following commands:
 
 **Using the NuGet Package Manager**
 ```
-Install-Package Synercoding.HostExtensions.EntityFrameworkCore -Version 1.0.0-alpha01
+Install-Package Synercoding.HostExtensions.EntityFrameworkCore -Version 1.0.0-alpha02
 ```
 
 **Using the .NET CLI**
 ```
-dotnet add package Synercoding.HostExtensions.EntityFrameworkCore -Version 1.0.0-alpha01
+dotnet add package Synercoding.HostExtensions.EntityFrameworkCore -Version 1.0.0-alpha02
 ```
 
 ---
@@ -45,12 +45,12 @@ Install it using the following commands:
 
 **Using the NuGet Package Manager**
 ```
-Install-Package Synercoding.HostExtensions.EntityFramework -Version 1.0.0-alpha01
+Install-Package Synercoding.HostExtensions.EntityFramework -Version 1.0.0-alpha02
 ```
 
 **Using the .NET CLI**
 ```
-dotnet add package Synercoding.HostExtensions.EntityFramework -Version 1.0.0-alpha01
+dotnet add package Synercoding.HostExtensions.EntityFramework -Version 1.0.0-alpha02
 ```
 
 ---
@@ -60,20 +60,45 @@ dotnet add package Synercoding.HostExtensions.EntityFramework -Version 1.0.0-alp
 
 Most of the tasks are build so the can be executed in sync and async code. Before calling `Run` or `RunAsync` on the `IHost`, you can call the different extension methods.
 
-If you are for example using EF Core & migrations, you can call `ExecuteOnDevelopment` (from Synercoding.HostExtensions) with in it a call to `MigrateDbContext` (from Synercoding.HostExtensions.EntityFrameworkCore)
+If you are for example running a website using EF Core & migrations:
+
+- You can call `ExecuteOnDevelopment` (from Synercoding.HostExtensions) with in it a call to `MigrateDbContext` (from Synercoding.HostExtensions.EntityFrameworkCore) and execute the development seed method. 
+- If the environment isn't development, but instead testing, then the testseed will be executed.
+- And if non of those apply, only the migration will be executed.
 
 ```
-public static async Task Main(string[] args)
+public class Program
 {
-    await CreateHostBuilder(args)
-        .Build()
-        .ExecuteOnDevelopment(host => host.MigrateDbContext<MyContext>(DevelopmentSeeder))
-        .ExecuteOnProduction(host => host.MigrateDbContext<MyContext>())
-        .RunAsync();
-}
+    public static async Task Main(string[] args)
+    {
+        await CreateHostBuilder(args)
+            .Build()
+            .ExecuteOnDevelopment(host => host.MigrateDbContext<QuestionairMailingContext>(DevelopmentSeeder))
+            .ElseIf(host => IsTestingEnvironment(host), host => host.MigrateDbContext<QuestionairMailingContext>(TestingSeeder))
+            .Else(host => host.MigrateDbContext<QuestionairMailingContext>())
+            .RunAsync();
+    }
 
-private static Task DevelopmentSeeder(MyContext context, IServiceProvider services)
-{
-    // Seed method here
+    private static bool IsTestingEnvironment(IHost host)
+        => host.Services.GetRequiredService<IHostEnvironment>().IsEnvironment("Testing");
+
+    private static Task DevelopmentSeeder(QuestionairMailingContext context, IServiceProvider services)
+    {
+        // Development seed method here
+        return Task.CompletedTask;
+    }
+
+    private static Task TestingSeeder(QuestionairMailingContext context, IServiceProvider services)
+    {
+        // Testing seed method here
+        return Task.CompletedTask;
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
 }
 ```

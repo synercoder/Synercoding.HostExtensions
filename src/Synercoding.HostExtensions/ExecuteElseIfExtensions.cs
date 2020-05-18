@@ -6,66 +6,45 @@ namespace Microsoft.Extensions.Hosting
     /// <summary>
     /// Extensions for the host to enable executions of code based on conditions.
     /// </summary>
-    public static class ExecuteIfExtensions
+    public static class ExecuteElseIfExtensions
     {
         /// <summary>
         /// Execute a task if the predicate returns true.
         /// </summary>
-        /// <typeparam name="THost">The <see cref="IHost"/> type</typeparam>
         /// <param name="hostTask">The task that can be awaited to get the host.</param>
         /// <param name="predicate">The predicate.</param>
         /// <param name="method">The method to execute if the predicate returns true.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public static async Task<ElseExecuteHost> ExecuteIf<THost>(this Task<THost> hostTask, Func<IHost, bool> predicate, Func<IHost, IHost> method)
-            where THost : IHost
+        public static async Task<ElseExecuteHost> ElseIf(this Task<ElseExecuteHost> hostTask, Func<IHost, bool> predicate, Func<IHost, IHost> method)
         {
             var host = await hostTask;
-            return ExecuteIf(host, predicate, method);
+            return ElseIf(host, predicate, method);
         }
 
         /// <summary>
         /// Execute a task if the predicate returns true.
         /// </summary>
-        /// <typeparam name="THost">The <see cref="IHost"/> type</typeparam>
         /// <param name="hostTask">The task that can be awaited to get the host.</param>
         /// <param name="predicate">The predicate.</param>
         /// <param name="method">The method to execute if the predicate returns true.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public static async Task<ElseExecuteHost> ExecuteIf<THost>(this Task<THost> hostTask, Func<IHost, Task<bool>> predicate, Func<IHost, IHost> method)
-            where THost : IHost
+        public static async Task<ElseExecuteHost> ElseIf(this Task<ElseExecuteHost> hostTask, Func<IHost, bool> predicate, Func<IHost, Task<IHost>> method)
         {
             var host = await hostTask;
-            return await ExecuteIf(host, predicate, method);
+            return await ElseIf(host, predicate, method);
         }
 
         /// <summary>
         /// Execute a task if the predicate returns true.
         /// </summary>
-        /// <typeparam name="THost">The <see cref="IHost"/> type</typeparam>
         /// <param name="hostTask">The task that can be awaited to get the host.</param>
         /// <param name="predicate">The predicate.</param>
         /// <param name="method">The method to execute if the predicate returns true.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public static async Task<ElseExecuteHost> ExecuteIf<THost>(this Task<THost> hostTask, Func<IHost, bool> predicate, Func<IHost, Task<IHost>> method)
-            where THost : IHost
+        public static async Task<ElseExecuteHost> ElseIf(this Task<ElseExecuteHost> hostTask, Func<IHost, Task<bool>> predicate, Func<IHost, Task<IHost>> method)
         {
             var host = await hostTask;
-            return await ExecuteIf(host, predicate, method);
-        }
-
-        /// <summary>
-        /// Execute a task if the predicate returns true.
-        /// </summary>
-        /// <typeparam name="THost">The <see cref="IHost"/> type</typeparam>
-        /// <param name="hostTask">The task that can be awaited to get the host.</param>
-        /// <param name="predicate">The predicate.</param>
-        /// <param name="method">The method to execute if the predicate returns true.</param>
-        /// <returns>A task that represents the asynchronous operation.</returns>
-        public static async Task<ElseExecuteHost> ExecuteIf<THost>(this Task<THost> hostTask, Func<IHost, Task<bool>> predicate, Func<IHost, Task<IHost>> method)
-            where THost : IHost
-        {
-            var host = await hostTask;
-            return await ExecuteIf(host, predicate, method);
+            return await ElseIf(host, predicate, method);
         }
 
         /// <summary>
@@ -75,8 +54,11 @@ namespace Microsoft.Extensions.Hosting
         /// <param name="predicate">The predicate.</param>
         /// <param name="method">The method to execute if the predicate returns true.</param>
         /// <returns>The host.</returns>
-        public static ElseExecuteHost ExecuteIf(this IHost host, Func<IHost, bool> predicate, Func<IHost, IHost> method)
+        public static ElseExecuteHost ElseIf(this ElseExecuteHost host, Func<IHost, bool> predicate, Func<IHost, IHost> method)
         {
+            if (!host.CanElseExecute)
+                return host;
+
             return predicate(host)
                 ? new ElseExecuteHost(method(host), false)
                 : new ElseExecuteHost(host, true);
@@ -89,22 +71,11 @@ namespace Microsoft.Extensions.Hosting
         /// <param name="predicate">The predicate.</param>
         /// <param name="method">The method to execute if the predicate returns true.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public static async Task<ElseExecuteHost> ExecuteIf(this IHost host, Func<IHost, Task<bool>> predicate, Func<IHost, IHost> method)
+        public static async Task<ElseExecuteHost> ElseIf(this ElseExecuteHost host, Func<IHost, bool> predicate, Func<IHost, Task<IHost>> method)
         {
-            return await predicate(host)
-                ? new ElseExecuteHost(method(host), false)
-                : new ElseExecuteHost(host, true);
-        }
+            if (!host.CanElseExecute)
+                return host;
 
-        /// <summary>
-        /// Execute a task if the predicate returns true.
-        /// </summary>
-        /// <param name="host">The host that will be used to execute the method.</param>
-        /// <param name="predicate">The predicate.</param>
-        /// <param name="method">The method to execute if the predicate returns true.</param>
-        /// <returns>A task that represents the asynchronous operation.</returns>
-        public static async Task<ElseExecuteHost> ExecuteIf(this IHost host, Func<IHost, bool> predicate, Func<IHost, Task<IHost>> method)
-        {
             return predicate(host)
                 ? new ElseExecuteHost(await method(host), false)
                 : new ElseExecuteHost(host, true);
@@ -117,8 +88,11 @@ namespace Microsoft.Extensions.Hosting
         /// <param name="predicate">The predicate.</param>
         /// <param name="method">The method to execute if the predicate returns true.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public static async Task<ElseExecuteHost> ExecuteIf(this IHost host, Func<IHost, Task<bool>> predicate, Func<IHost, Task<IHost>> method)
+        public static async Task<ElseExecuteHost> ElseIf(this ElseExecuteHost host, Func<IHost, Task<bool>> predicate, Func<IHost, Task<IHost>> method)
         {
+            if (!host.CanElseExecute)
+                return host;
+
             return await predicate(host)
                 ? new ElseExecuteHost(await method(host), false)
                 : new ElseExecuteHost(host, true);

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageVersion>1.0.0-alpha01</PackageVersion>
+    <PackageVersion>1.0.0-alpha02</PackageVersion>
     <VersionPrefix>0.0.1</VersionPrefix>
     <VersionPrefix Condition="'$(packageversion)' != ''">$(PackageVersion)</VersionPrefix>
     <VersionSuffix></VersionSuffix>
@@ -20,7 +20,7 @@
     <PackageProjectUrl>https://github.com/synercoder/Synercoding.HostExtensions</PackageProjectUrl>
     <RepositoryUrl>https://github.com/synercoder/Synercoding.HostExtensions</RepositoryUrl>
     <PackageReleaseNotes>
-      - Initial release
+      - Added overloads for ElseExecuteHost, IHost and THost
     </PackageReleaseNotes>
   </PropertyGroup>
 

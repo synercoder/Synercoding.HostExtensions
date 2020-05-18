@@ -18,6 +18,106 @@ namespace Microsoft.Extensions.Hosting
         /// <summary>
         /// Migrate and seed the DbContext using the seed delegate.
         /// </summary>
+        /// <typeparam name="THost">The <see cref="IHost"/> type</typeparam>
+        /// <typeparam name="TContext">The DbContext type</typeparam>
+        /// <typeparam name="TMigrationsConfiguration">The type of the migrations configuration to use during initialization.</typeparam>
+        /// <param name="hostTask">The task that can be awaited to get the host.</param>
+        /// <param name="seeder">The seed delegate.</param>
+        /// <returns>A task that represents the asynchronous migration operation.</returns>
+        public static async Task<IHost> MigrateDbContext<THost, TContext, TMigrationsConfiguration>(this Task<THost> hostTask, AsyncSeedMethod<TContext> seeder)
+            where THost : IHost
+            where TContext : DbContext
+            where TMigrationsConfiguration : DbMigrationsConfiguration<TContext>, new()
+        {
+            var host = await hostTask;
+            return await host.MigrateDbContext<TContext, TMigrationsConfiguration>(seeder);
+        }
+
+        /// <summary>
+        /// Migrate and seed the DbContext using the seed delegate.
+        /// </summary>
+        /// <typeparam name="THost">The <see cref="IHost"/> type</typeparam>
+        /// <typeparam name="TContext">The DbContext type</typeparam>
+        /// <typeparam name="TMigrationsConfiguration">The type of the migrations configuration to use during initialization.</typeparam>
+        /// <param name="hostTask">The task that can be awaited to get the host.</param>
+        /// <param name="seeder">The seed delegate.</param>
+        /// <returns>A task that represents the asynchronous migration operation.</returns>
+        public static async Task<IHost> MigrateDbContext<THost, TContext, TMigrationsConfiguration>(this Task<THost> hostTask, SeedMethod<TContext> seeder)
+            where THost : IHost
+            where TContext : DbContext
+            where TMigrationsConfiguration : DbMigrationsConfiguration<TContext>, new()
+        {
+            var host = await hostTask;
+            return await host.MigrateDbContext<TContext, TMigrationsConfiguration>(seeder);
+        }
+
+        /// <summary>
+        /// Migrate the DbContext.
+        /// </summary>
+        /// <typeparam name="THost">The <see cref="IHost"/> type</typeparam>
+        /// <typeparam name="TContext">The DbContext type</typeparam>
+        /// <typeparam name="TMigrationsConfiguration">The type of the migrations configuration to use during initialization.</typeparam>
+        /// <param name="hostTask">The task that can be awaited to get the host.</param>
+        /// <returns>A task that represents the asynchronous migration operation.</returns>
+        public static async Task<IHost> MigrateDbContext<THost, TContext, TMigrationsConfiguration>(this Task<THost> hostTask)
+            where THost : IHost
+            where TContext : DbContext
+            where TMigrationsConfiguration : DbMigrationsConfiguration<TContext>, new()
+        {
+            var host = await hostTask;
+            return await host.MigrateDbContext<TContext, TMigrationsConfiguration>();
+        }
+
+        /// <summary>
+        /// Migrate and seed the DbContext using the seed delegate.
+        /// </summary>
+        /// <typeparam name="TContext">The DbContext type</typeparam>
+        /// <typeparam name="TMigrationsConfiguration">The type of the migrations configuration to use during initialization.</typeparam>
+        /// <param name="hostTask">The task that can be awaited to get the host.</param>
+        /// <param name="seeder">The seed delegate.</param>
+        /// <returns>A task that represents the asynchronous migration operation.</returns>
+        public static async Task<IHost> MigrateDbContext<TContext, TMigrationsConfiguration>(this Task<ElseExecuteHost> hostTask, AsyncSeedMethod<TContext> seeder)
+            where TContext : DbContext
+            where TMigrationsConfiguration : DbMigrationsConfiguration<TContext>, new()
+        {
+            var host = await hostTask;
+            return await host.MigrateDbContext<TContext, TMigrationsConfiguration>(seeder);
+        }
+
+        /// <summary>
+        /// Migrate and seed the DbContext using the seed delegate.
+        /// </summary>
+        /// <typeparam name="TContext">The DbContext type</typeparam>
+        /// <typeparam name="TMigrationsConfiguration">The type of the migrations configuration to use during initialization.</typeparam>
+        /// <param name="hostTask">The task that can be awaited to get the host.</param>
+        /// <param name="seeder">The seed delegate.</param>
+        /// <returns>A task that represents the asynchronous migration operation.</returns>
+        public static async Task<IHost> MigrateDbContext<TContext, TMigrationsConfiguration>(this Task<ElseExecuteHost> hostTask, SeedMethod<TContext> seeder)
+            where TContext : DbContext
+            where TMigrationsConfiguration : DbMigrationsConfiguration<TContext>, new()
+        {
+            var host = await hostTask;
+            return await host.MigrateDbContext<TContext, TMigrationsConfiguration>(seeder);
+        }
+
+        /// <summary>
+        /// Migrate the DbContext.
+        /// </summary>
+        /// <typeparam name="TContext">The DbContext type</typeparam>
+        /// <typeparam name="TMigrationsConfiguration">The type of the migrations configuration to use during initialization.</typeparam>
+        /// <param name="hostTask">The task that can be awaited to get the host.</param>
+        /// <returns>A task that represents the asynchronous migration operation.</returns>
+        public static async Task<IHost> MigrateDbContext<TContext, TMigrationsConfiguration>(this Task<ElseExecuteHost> hostTask)
+            where TContext : DbContext
+            where TMigrationsConfiguration : DbMigrationsConfiguration<TContext>, new()
+        {
+            var host = await hostTask;
+            return await host.MigrateDbContext<TContext, TMigrationsConfiguration>();
+        }
+
+        /// <summary>
+        /// Migrate and seed the DbContext using the seed delegate.
+        /// </summary>
         /// <typeparam name="TContext">The DbContext type</typeparam>
         /// <typeparam name="TMigrationsConfiguration">The type of the migrations configuration to use during initialization.</typeparam>
         /// <param name="hostTask">The task that can be awaited to get the host.</param>

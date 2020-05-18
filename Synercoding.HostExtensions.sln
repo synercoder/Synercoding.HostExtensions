@@ -23,11 +23,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{4FDED5D1-8
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synercoding.HostExtensions", "src\Synercoding.HostExtensions\Synercoding.HostExtensions.csproj", "{49DB4C67-D68D-4C46-8B66-55054A55B1BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synercoding.HostExtensions", "src\Synercoding.HostExtensions\Synercoding.HostExtensions.csproj", "{49DB4C67-D68D-4C46-8B66-55054A55B1BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synercoding.HostExtensions.EntityFrameworkCore", "src\Synercoding.HostExtensions.EntityFrameworkCore\Synercoding.HostExtensions.EntityFrameworkCore.csproj", "{00AF5800-58FA-4854-9047-D38E901E666E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synercoding.HostExtensions.EntityFrameworkCore", "src\Synercoding.HostExtensions.EntityFrameworkCore\Synercoding.HostExtensions.EntityFrameworkCore.csproj", "{00AF5800-58FA-4854-9047-D38E901E666E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Synercoding.HostExtensions.EntityFramework", "src\Synercoding.HostExtensions.EntityFramework\Synercoding.HostExtensions.EntityFramework.csproj", "{7D37CAF5-7BF7-4B5C-80F4-3D4645B8C220}"
 EndProject

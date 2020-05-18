@@ -73,22 +73,22 @@ public class Program
     {
         await CreateHostBuilder(args)
             .Build()
-            .ExecuteOnDevelopment(host => host.MigrateDbContext<QuestionairMailingContext>(DevelopmentSeeder))
-            .ElseIf(host => IsTestingEnvironment(host), host => host.MigrateDbContext<QuestionairMailingContext>(TestingSeeder))
-            .Else(host => host.MigrateDbContext<QuestionairMailingContext>())
+            .ExecuteOnDevelopment(host => host.MigrateDbContext<MyContext>(DevelopmentSeeder))
+            .ElseIf(host => IsTestingEnvironment(host), host => host.MigrateDbContext<MyContext>(TestingSeeder))
+            .Else(host => host.MigrateDbContext<MyContext>())
             .RunAsync();
     }
 
     private static bool IsTestingEnvironment(IHost host)
         => host.Services.GetRequiredService<IHostEnvironment>().IsEnvironment("Testing");
 
-    private static Task DevelopmentSeeder(QuestionairMailingContext context, IServiceProvider services)
+    private static Task DevelopmentSeeder(MyContext context, IServiceProvider services)
     {
         // Development seed method here
         return Task.CompletedTask;
     }
 
-    private static Task TestingSeeder(QuestionairMailingContext context, IServiceProvider services)
+    private static Task TestingSeeder(MyContext context, IServiceProvider services)
     {
         // Testing seed method here
         return Task.CompletedTask;

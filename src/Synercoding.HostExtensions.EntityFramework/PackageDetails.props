@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageVersion>1.0.0-alpha01</PackageVersion>
+    <VersionPrefix>0.0.1</VersionPrefix>
+    <VersionPrefix Condition="'$(packageversion)' != ''">$(PackageVersion)</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageTags>Host ef EntityFramework</PackageTags>
+    <Title>Synercoding.HostExtensions.EntityFramework</Title>
+    <Product>$(Title)</Product>
+    <Description>A library that contains extensions for Microsoft.Extensions.Hosting.IHost for EF.</Description>
+    <PackageProjectUrl>https://github.com/synercoder/Synercoding.HostExtensions</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/synercoder/Synercoding.HostExtensions</RepositoryUrl>
+    <PackageReleaseNotes>
+      - Initial release
+    </PackageReleaseNotes>
+  </PropertyGroup>
+
+</Project>
